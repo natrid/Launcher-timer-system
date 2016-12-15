@@ -1,3 +1,7 @@
+//Vastaanottopaa
+//Version: 0.1
+// Date: 15.12.2016
+
 boolean firstPortActivated = false;
 boolean secondPortActivated = false;
 
@@ -9,7 +13,7 @@ void setup()
 
   pinMode(12,OUTPUT); //LED for first gate
   pinMode(13,OUTPUT); //LED for second gate
-  Serial.begin(9600);
+  //Serial.begin(9600);
 }
 
 void loop(){
@@ -17,12 +21,13 @@ void loop(){
   while(!firstPortActivated){
     delay(1);
   }
-  digitalWrite(8, HIGH); //Pulse signal HIGH
+  digitalWrite(8, HIGH); //START PULSE Pulse signal = HIGH
 
   secondPortActivated = false; //Make sure second port is not yet activated
 
   unsigned long currentTime =  millis();
-  //Making sure the second port is activated within 3 seconds of first port activation
+  //If crossing gates takes more than three seconds
+  //Send crossing signal to display slowest speed of 1 km/h (= 1/3 m/s)
   unsigned long firstPortTime = millis();
   firstPortTime += 3000;
   while(!secondPortActivated){
@@ -32,13 +37,12 @@ void loop(){
     currentTime = millis();
   }
 
-  digitalWrite(8, LOW); //Pulse signal LOW
+  digitalWrite(8, LOW); //END PULSE Pulse signal = LOW
   firstPortActivated = false;
   secondPortActivated = false;
 }
 
 void firstPort(){
-  //digitalWrite(8, HIGH);
   //Debug lights
   digitalWrite(13, HIGH);
   digitalWrite(12, LOW);
@@ -46,7 +50,6 @@ void firstPort(){
 }
 
 void secondPort(){
-  //digitalWrite(8, LOW);
   //Debug lights
   digitalWrite(12, HIGH);
   digitalWrite(13, LOW);
