@@ -1,9 +1,16 @@
 //Vastaanottopaa
-//Version: 0.1
-// Date: 15.12.2016
+//Version: 0.2
+// Date: 20.1.2016
+
+//For compiling in PlatformIO
+//#include "Arduino.h"
 
 boolean firstPortActivated = false;
 boolean secondPortActivated = false;
+void firstPort();
+void secondPort();
+void checkBeam();
+
 
 void setup()
 {
@@ -19,7 +26,8 @@ void setup()
 void loop(){
   //Wait for first port to activate
   while(!firstPortActivated){
-    delay(1);
+    delay(10);
+    checkBeam();
   }
   digitalWrite(8, HIGH); //START PULSE Pulse signal = HIGH
 
@@ -31,6 +39,8 @@ void loop(){
   unsigned long firstPortTime = millis();
   firstPortTime += 3000;
   while(!secondPortActivated){
+    checkBeam();
+
     if(currentTime > firstPortTime){
       secondPortActivated = true;
     }
@@ -42,16 +52,30 @@ void loop(){
   secondPortActivated = false;
 }
 
+//Function which checks if the laser beam hits the sensor
+void checkBeam(){
+  if(digitalRead(2)){
+    digitalWrite(12,HIGH);
+  }
+  else{
+    digitalWrite(12,LOW);
+  }
+  if(digitalRead(3)){
+    digitalWrite(13,HIGH);
+  }
+  else{
+    digitalWrite(13,LOW);
+  }
+}
+
 void firstPort(){
   //Debug lights
-  digitalWrite(13, HIGH);
-  digitalWrite(12, LOW);
+  //digitalWrite(13, HIGH);
   firstPortActivated = true;
 }
 
 void secondPort(){
   //Debug lights
-  digitalWrite(12, HIGH);
-  digitalWrite(13, LOW);
+  //digitalWrite(12, HIGH);
   secondPortActivated = true;
 }
