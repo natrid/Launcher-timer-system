@@ -1,13 +1,15 @@
+#include <Arduino.h>
+
 //Lahetyspaa
-//Version: 0.1
-//Date: 11.12.2016
+//Version: 0.2
+//Date: 17.02.2016
 
 #include "LedControl.h" //  library for controlling MAX7219 controller
 LedControl lc = LedControl(10,11,12,1); // Setup MAX7219 controller to right output pins
-unsigned long startTime = 0;
+unsigned long startTime = 0; // Starting time in milliseconds
 volatile unsigned long firstPortTime = 0;
 volatile unsigned long secondPortTime = 0;
-double timeElapsed = 0.0;
+double timeElapsed = 0.0; // Elapsed time in seconds
 volatile boolean firstPortActivated = false;
 volatile boolean secondPortActivated = false;
 
@@ -56,12 +58,16 @@ void loop(){
     secondPortActivated = false;
     delay(10);
     //Wait for first port to be activated
-    while(firstPortActivated == false){
+    while(firstPortActivated == false && timeElapsed > 5){
       //Show new time once every 10 ms
       delay(10);
-      timeElapsed = millis();
-      timeElapsed = timeElapsed - startTime;
-      timeElapsed = timeElapsed / 1000;
+
+      //timeElapsed = millis();
+      //timeElapsed = timeElapsed - startTime;
+      //timeElapsed = timeElapsed / 1000;
+
+      timeElapsed = (millis() - startTime) / 1000;
+
       displayTime(timeElapsed);
       //showTime(timeElapsed);
       //Check if stop button (A1) is pressed
