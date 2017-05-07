@@ -57,22 +57,32 @@ void loop(){
     firstPortActivated = false;
     secondPortActivated = false;
     delay(10);
+
     //Wait for first port to be activated
-    while(firstPortActivated == false && timeElapsed > 5){
+    while(firstPortActivated == false){
       //Show new time once every 10 ms
       delay(10);
 
-      //timeElapsed = millis();
-      //timeElapsed = timeElapsed - startTime;
-      //timeElapsed = timeElapsed / 1000;
+      timeElapsed = millis();
+      timeElapsed = timeElapsed - startTime;
+      timeElapsed = timeElapsed / 1000;
 
-      timeElapsed = (millis() - startTime) / 1000;
+      //timeElapsed = (millis() - startTime) / 1000;
 
       displayTime(timeElapsed);
       //showTime(timeElapsed);
       //Check if stop button (A1) is pressed
       if(buttonRead(1)){
         return;
+      }
+
+      // Check if the wanted time has passed since start
+      // if time has not passed reset port states and values
+      if (timeElapsed < 5 ) {
+        firstPortActivated = false;
+        firstPortTime = 0;
+        secondPortActivated = false;
+        secondPortTime = 0;
       }
     }
 
@@ -221,7 +231,7 @@ void countdown(){
   digitalWrite(6,LOW);
   digitalWrite(5,LOW);
   digitalWrite(9,LOW);
-  digitalWrite(7,HIGH);
+  //digitalWrite(7,HIGH);
   digitalWrite(8,HIGH);
 
   lc.clearDisplay(0);// clear screen
